@@ -113,16 +113,17 @@
 \begin{frame}{Introdução}
     \frametitle{Introdução}
     \framesubtitle{Beamforming}
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.5\columnwidth]{schematic-aeroacoustic-beamforming.png}
+        \caption{Esquemático de beamforming para um aerofólio. Fonte: \cite{arcondoulis_2010_design}}
+    \end{figure}
+
 \end{frame}
 
 % ----------------- NOVO SLIDE --------------------------------
 
-\begin{frame}{Introdução}
-    \frametitle{Introdução}
-    \framesubtitle{Aprendizado de máquina}
-\end{frame}
-
-% ----------------- NOVO SLIDE --------------------------------
 
 \begin{frame}{Introdução}
     \frametitle{Introdução}
@@ -199,8 +200,7 @@ principalmente quando usados com algoritmos de deconvolução
 \cite{carranza_2022_beamforming}.
 \vspace{5pt}
 
-Sendo possível interpretá-los como
-uma função que mapeia as leituras dos microfones
+Sendo uma função que mapeia as leituras dos microfones
 às fontes de ruído,
 são candidatos a serem substituídos por
 aprendizado de máquina.
@@ -210,17 +210,6 @@ Ademais, as redes neurais podem ser projetadas
 de modo a diminuir a interferência de ruído,
 \cite{ibias2024noise}
 aumentando sua acurácia.
-
-\end{frame}
-
-% ----------------- NOVO SLIDE --------------------------------
-\begin{frame}
-
-\begin{figure}
-  \centering
-  \includegraphics[scale=1.0]{abntex2-modelo-img-marca.pdf}
-  \caption{Marca abnTeX2. Fonte: \url{http://www.abntex.net.br/}}
-\end{figure}
 
 \end{frame}
 
@@ -285,7 +274,6 @@ serão usadas as seguintes relações \cite{Glegg2023-mi}:
 
 \begin{figure}[H]
 	\begin{center}
-	\caption{\label{fig:ann}Exemplo de rede neural artificial}
     \begin{tikzpicture}
         \node(i1) [circle, minimum size=22] at (-2, 1) {$i_1$};
         \node(i2) [circle, minimum size=22, below= of i1] {$i_2$};
@@ -330,7 +318,7 @@ serão usadas as seguintes relações \cite{Glegg2023-mi}:
         \draw[->] (23) -- (o1);
         \draw[->] (23) -- (o2);
     \end{tikzpicture} \\
-    \fautor
+	\caption{\label{fig:ann}Exemplo de rede neural artificial. \fautor}
 	\end{center}
 \end{figure}
 
@@ -363,15 +351,111 @@ serão usadas as seguintes relações \cite{Glegg2023-mi}:
 \end{frame}
 
 % ----------------- NOVO SLIDE --------------------------------
+\section{Metodologia}
+\begin{frame}
+\frametitle{Metodologia}
+%\framesubtitle{Usando a suíte abnTeX2}
+
+\begin{figure}[H]
+	\begin{center}
+	\caption{\label{fig:grid}Esquemático de exemplo de grade de pontos focais e microfones}
+    \begin{tikzpicture}[scale=0.8]
+        \foreach \x in {1,...,5}
+        \foreach \y in {1,...,5}
+        %\fill (\x,\y) circle[radius=1pt] node[above right] {$x_{\x,\y}$};
+        \fill (\x,\y) circle[radius=1pt] node[above right] {};
+
+        \foreach \x in {1,...,4}
+        \draw (\x+0.5,-0.5) circle[radius=2pt] node[above right] {};
+
+        \fill (7, 4) circle[radius=1pt] node[right] {ponto focal};
+        \draw (7, 3.5) circle[radius=2pt] node[right] {microfone};
+        \draw[draw=black] (6.5,3) rectangle ++(3,1.5);
+    \end{tikzpicture} \\
+    \fautor
+	\end{center}	
+\end{figure}
+
+
+\end{frame}
+
+% ----------------- NOVO SLIDE --------------------------------
+\begin{frame}
+\frametitle{Metodologia}
+\framesubtitle{Hiperparâmetros}
+
+Os hiperparâmetros a serem testados são:
+\begin{itemize}
+    \item Separação de treino e teste;
+    \item Número de camadas escondidas;
+    \item Número de neurônios em cada camada escondida;
+    \item Número de pares no conjunto de dados;
+    \item Porcentagem de pares para treino;
+\end{itemize}
+
+\end{frame}
+
+
+% ----------------- NOVO SLIDE --------------------------------
 \section{Resultados preliminares}
 \begin{frame}
 \frametitle{Resultados preliminares}
 %\framesubtitle{Usando a suíte abnTeX2}
 
+Para os testes preliminares foi usada uma grade $6\times6$ pontos focais
+e 5 microfones em linha logo abaixo:
+
+\begin{figure}[H]
+	\begin{center}
+	\caption{Grade usada para os testes preliminares}
+    \begin{tikzpicture}[scale=0.8]
+        \foreach \x in {1,...,6}
+        \foreach \y in {1,...,6}
+        %\fill (\x,\y) circle[radius=1pt] node[above right] {$x_{\x,\y}$};
+        \fill (-2-1/1.5+\x/1.5,5/6+\y/6) circle[radius=1pt] node[above right] {};
+
+        \foreach \x in {1,...,5}
+        \draw (-3+0.2+\x*0.8,0) circle[radius=2pt] node[above right] {};
+
+        \fill (4, 2) circle[radius=1pt] node[right] {ponto focal};
+        \draw (4, 1.5) circle[radius=2pt] node[right] {microfone};
+        \draw[draw=black] (3.5,1) rectangle ++(3,1.5);
+    \end{tikzpicture} \\
+    \fautor
+	\end{center}	
+\end{figure}
 
 
 \end{frame}
 
+% ----------------- NOVO SLIDE --------------------------------
+\begin{frame}
+\frametitle{Resultados preliminares}
+\framesubtitle{Hiperparâmetros}
+
+Os hiperparâmetros a serem testados são:
+\begin{itemize}
+    \item Número de camadas escondidas: $ [1] $ 
+    \item Número de neurônios em cada camada escondida: $[1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024]$;
+    \item Número de pares no conjunto de dados: $[100, 180, 325, 585, 1054, 1898, 3420, 6162, 11101, 20000]$
+    \item Porcentagem de pares para treino: $[0.25, 0.5, 0.75]$
+    \item Taxa de aprendizado: $[1.00e-2, 5.62e-3, 3.16e-3, 1.78e-3, 1.00e-3, 5.00e-4, 3.16e-4, 2.00e-4, 1.41e-4, 1.00e-4, 5.00e-5]$
+\end{itemize}
+
+\end{frame}
+
+% ----------------- NOVO SLIDE --------------------------------
+\begin{frame}
+\frametitle{Resultados preliminares}
+\framesubtitle{Overfitting}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\columnwidth]{overfit.png}
+    \caption{Esquemático de beamforming para um aerofólio. \fautor}
+\end{figure}
+
+\end{frame}
 % ----------------- NOVO SLIDE --------------------------------
 \section{Referências}
 
